@@ -1,0 +1,34 @@
+flowchart LR
+  R(["Sistema CAUDAL"])
+  R --> A["Operación en campo"]
+  R --> B["Confiabilidad y disponibilidad"]
+  R --> C["Seguridad y privacidad"]
+  R --> M["Mantenibilidad y evolución"]
+  R --> K["Costo y operación"]
+  R --> F["Alcance futuro"]
+
+  A --> D01["D-01 Offline-first<br/>(5,4) Estratégico"]:::est
+  A --> D07["D-07 Lectura en ≤ 4 toques<br/>(4,2) Quick win"]:::qw
+  A --> D11["D-11 Accesibilidad<br/>(3,2) Incremental"]:::inc
+
+  B --> D05["D-05 La IA no bloquea<br/>(5,3) Quick win"]:::qw
+  B --> D13["D-13 Calidad del pronóstico medible<br/>(4,3) Quick win"]:::qw
+  B --> D14["D-14 Página pública rápida<br/>(3,2) Incremental"]:::inc
+
+  C --> D03["D-03 Aislamiento entre acueductos<br/>(5,4) Estratégico"]:::est
+  C --> D04["D-04 Cuentas y mínimo privilegio<br/>(5,3) Quick win"]:::qw
+  C --> D02["D-02 Decisión trazable<br/>(5,3) Quick win"]:::qw
+  C --> D15["D-15 Simulado ≠ real<br/>(4,2) Quick win"]:::qw
+
+  M --> D08["D-08 Pruebas sin BD<br/>(4,4) Estratégico"]:::est
+  M --> D10["D-10 Acueducto nuevo sin código<br/>(3,3) Incremental"]:::inc
+
+  K --> D06["D-06 Costo ≈ 0, equipo de 3<br/>(4,2) Quick win"]:::qw
+
+  F --> D09["D-09 Hardware real<br/>(2,4) Diferir"]:::dif
+  F --> D12["D-12 Facturación<br/>(1,5) Evitar"]:::dif
+
+  classDef est fill:#b42318,color:#fff,stroke:#7a1a12
+  classDef qw fill:#1d7a46,color:#fff,stroke:#0f4d2b
+  classDef inc fill:#2f5f8a,color:#fff,stroke:#1c3d5a
+  classDef dif fill:#8a8f98,color:#fff,stroke:#5b6068
