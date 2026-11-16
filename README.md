@@ -8,7 +8,36 @@ Java 25 · Spring Boot 4.1 · PostgreSQL 18 · Swagger.
 
 ## Estado
 
-**Fase 1: fundaciones.** Esqueleto de Spring Boot con calidad de código (Spotless, Checkstyle, SpotBugs), PostgreSQL 18 con Flyway, logs JSON, formato canónico de errores, salud y Swagger. Las fases siguen el [orden de trabajo](docs/Roles-y-planeacion.md) y el [plan de commits](docs/Plan-de-commits.md).
+**Fases 1 a 12 completas** (estado de `develop` verificado el 2026-11-16 en `3c87ae3`): login con MFA, reglas versionadas, lecturas con validación en cadena e importación simulada, pronóstico con respaldo, turnos y decisión de la Junta, publicación, reportes de daño, cierre y actas, evaluación de la IA, dispositivos firmados con Ed25519 y endurecimiento. Detalle y pendientes en [Versión 1.0.0](docs/Version-1.0.0.md). La etiqueta `v1.0.0` todavía **no** está creada (paso 4 de esa página).
+
+En cifras: 792 archivos Java de producción, 198 de prueba, 34 controladores, 56 puertos de salida y 53 migraciones Flyway (7 esquemas, 57 tablas). Desplegado en Render: `https://caudal-api-7crk.onrender.com` (`/actuator/health`, `/swagger-ui.html`).
+
+## Arranque rápido (sistema completo)
+
+Con los cuatro repositorios clonados como carpetas hermanas (`caudal-backend`, `caudal-frontend`, `caudal-ia`, `caudal-simulador`) y Docker con Compose:
+
+```bash
+make up       # PostgreSQL 18 + API + IA + PWA, con .env generado y secretos aleatorios
+make smoke    # 9 verificaciones; termina con código distinto de 0 si algo falla
+```
+
+| Pieza | URL |
+|---|---|
+| PWA | http://localhost:8081 |
+| API y Swagger | http://localhost:8080/swagger-ui.html |
+| IA | http://localhost:8000/v1/health |
+| PostgreSQL | `localhost:5432` (configurable con `DB_HOST_PORT`) |
+
+Guía completa, puertos, solución de problemas y demo: [Arranque local](docs/Arranque-local.md). Evidencia de la última ejecución: [Evidencias de verificación](docs/Evidencias-verificacion.md).
+
+## Arquitectura
+
+La documentación de este repositorio es la **canónica** de los cuatro. Para la arquitectura, la ruta de lectura es:
+
+1. [Drivers y árbol de utilidad](docs/Drivers.md): qué fuerzas moldean el diseño y cómo se priorizaron.
+2. [Decisiones (ADR-001 a ADR-007)](docs/ADRs/README.md): cada decisión con sus alternativas descartadas.
+3. [Trazabilidad](docs/Trazabilidad-arquitectura.md): driver → ADR → clase real → prueba → comando.
+4. [Arquitectura](docs/Arquitectura.md): C4, hexágono, flujos, despliegue y CI/CD.
 
 ## Versiones fijadas
 
@@ -22,12 +51,12 @@ Java 25 · Spring Boot 4.1 · PostgreSQL 18 · Swagger.
 
 ## Documentación
 
-- [Índice de la documentación](docs/README.md): problema, actores, historias de usuario, requerimientos, reglas de negocio, arquitectura, modelo de datos, API, seguridad, patrones, IA, datos simulados, hardware, planeación y plan de commits.
+- [Índice de la documentación](docs/README.md): drivers, ADR, trazabilidad, problema, actores, historias de usuario, requerimientos, reglas de negocio, arquitectura, modelo de datos, API, seguridad, patrones, IA, datos simulados, hardware, planeación y plan de commits.
 - [AGENTS.md](AGENTS.md): reglas obligatorias para personas y agentes.
 - [Flujo de trabajo](.agents/workflow.md): cuentas, ramas, commits y PR.
 - [Política de seguridad](SECURITY.md) y [cómo contribuir](CONTRIBUTING.md).
 
-## Cómo correrlo en local
+## Cómo correr solo la API fuera de Docker
 
 Requisitos: JDK 25 y Docker Engine con Compose. Con Podman funciona igual si `DOCKER_HOST` apunta a su socket (`systemctl --user start podman.socket` y `export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock`).
 
@@ -38,7 +67,7 @@ Requisitos: JDK 25 y Docker Engine con Compose. Con Podman funciona igual si `DO
    set -a; . ./.env; set +a
    ```
 
-   Para la base local, usa `jdbc:postgresql://localhost:5432/caudal?sslmode=disable` en `DATABASE_URL` y `FLYWAY_URL`. Mientras no existan los roles de la Fase 2, `DATABASE_USERNAME` y `DATABASE_PASSWORD` pueden ser los mismos de Flyway.
+   Más simple: `make env` genera el `.env` local con `DATABASE_URL` y `FLYWAY_URL` apuntando a `localhost` y con secretos aleatorios. La API se conecta como `caudal_app` (el contenedor `db` le asigna la contraseña de `DATABASE_PASSWORD` al crearse el volumen) y Flyway migra como `caudal_migrator`.
 
 2. Levanta PostgreSQL 18:
 
@@ -76,7 +105,7 @@ Con `API_DOCS_ENABLED=false`, Swagger UI y `/v3/api-docs` responden `404`. Cada 
 ./mvnw spotless:apply     # aplica el formato
 ```
 
-Las pruebas de integración usan PostgreSQL 18 real con Testcontainers (perfil `test`), por eso necesitan Docker o Podman. El mismo `./mvnw verify` corre en GitHub Actions (`.github/workflows/ci.yml`), junto con CodeQL y gitleaks (`.github/workflows/security.yml`).
+Las pruebas de integración usan PostgreSQL 18 real con Testcontainers (perfil `test`), por eso necesitan Docker o Podman. El mismo `./mvnw verify` corre en GitHub Actions (`.github/workflows/ci.yml`), junto con CodeQL, *dependency review* y OWASP Dependency-Check (`.github/workflows/security.yml`).
 
 ## Repositorios del proyecto
 

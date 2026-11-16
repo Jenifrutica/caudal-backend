@@ -21,12 +21,24 @@ Esta carpeta es la **documentación canónica** de los 4 repositorios. Los demá
 | [Reglas de negocio](Reglas-de-negocio.md) | Reglas versionadas, bandas, asignación de turnos, validación de lecturas, estados, actas |
 | [Glosario](Glosario.md) | Términos del dominio y su nombre en el código |
 
+## Arquitectura (entregable de la materia)
+
+Ruta de lectura para la sustentación: drivers → decisiones → código → prueba de que corre.
+
+| Documento | Contenido |
+|---|---|
+| [Drivers arquitectónicos](Drivers.md) | 15 drivers con fuente (RNF, HU, RG), escenario medible, importancia y dificultad; árbol de utilidad y matriz de priorización |
+| [Decisiones de arquitectura (ADR)](ADRs/README.md) | ADR-001 a ADR-007 con contexto, decisión, alternativas descartadas, consecuencias y evidencia |
+| [Trazabilidad de la arquitectura](Trazabilidad-arquitectura.md) | Driver → táctica → ADR → clase real → prueba → comando; deriva documentación-código corregida |
+| [Arranque local](Arranque-local.md) | `make up` levanta PostgreSQL, API, IA y PWA; `make smoke` lo verifica |
+| [Evidencias de verificación](Evidencias-verificacion.md) | Comandos ejecutados y sus resultados (compilación, pruebas, arranque, salud) |
+
 ## Técnico
 
 | Documento | Contenido |
 |---|---|
 | [Stack tecnológico](Stack-tecnologico.md) | Tecnologías por capa con su justificación y alternativas descartadas |
-| [Arquitectura](Arquitectura.md) | C4, arquitectura hexagonal, flujos, despliegue, CI/CD y decisiones |
+| [Arquitectura](Arquitectura.md) | C4, arquitectura hexagonal, flujos, despliegue, CI/CD e índice de los ADR |
 | [Modelo de datos](Modelo-de-datos.md) | 7 esquemas y 57 tablas, relaciones, migraciones y semilla |
 | [Diccionario de datos](Diccionario-de-datos.md) | Cada columna con tipo, restricciones y clasificación (generado) |
 | [API REST](API.md) | Convenciones, errores, Swagger y todos los endpoints |
@@ -57,7 +69,7 @@ Esta carpeta es la **documentación canónica** de los 4 repositorios. Los demá
 
 ## Diagramas
 
-Todos se hacen con draw.io (MCP de draw.io y sus iconos). Cada diagrama tiene su fuente `.drawio` y su exportación `.png` en [`images/`](images/).
+Todos se hacen con draw.io (MCP de draw.io y sus iconos). Cada diagrama tiene su fuente `.drawio` y su exportación `.png` en [`images/`](images/). Excepción: el árbol de utilidad (`drivers-arbol`) se hizo en Mermaid (`drivers-arbol.mmd` + `.png`) para que GitHub también lo muestre dentro de `Drivers.md`.
 
 | Diagrama | Archivo |
 |---|---|
